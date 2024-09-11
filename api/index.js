@@ -124,11 +124,11 @@ export default async (req, res) => {
             <!-- Adiciona o drop-down para selecionar o idioma -->
             <label for="languageSelector">Escolha o idioma:</label>
             <select id="languageSelector">
-              <option value="en">Inglês</option> <!-- Inglês -->
+              <option value="en"}>Inglês</option> <!-- Inglês -->
               <option value="pt-br">Português</option> <!-- Português -->
               <option value="fr">Francês</option> <!-- Francês -->
-              <option value="es">Espanhol</option> <!-- Espanhol -->
-              <option value="de">Alemão</option> <!-- Alemão -->
+              <option value="es"}>Espanhol</option> <!-- Espanhol -->
+              <option value="de" ${locale.toLowerCase === "de" ? "selected" : ""}>Alemão</option> <!-- Alemão -->
               <option value="pl">Polonês</option> <!-- Polonês -->
               <option value="ru">Russo</option> <!-- Russo -->
               <option value="ar">Árabe</option> <!-- Árabe -->
@@ -140,6 +140,7 @@ export default async (req, res) => {
 
           <!-- Script para manipular o SVG -->
           <script>
+            
             // Função para atualizar o título do langcard com base na seleção de idioma
             function atualizarIdioma() {
               // Seleciona o SVG
