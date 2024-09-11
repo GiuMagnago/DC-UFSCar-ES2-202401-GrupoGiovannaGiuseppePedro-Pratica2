@@ -153,7 +153,7 @@ export default async (req, res) => {
                 // Recarrega a página com o novo idioma selecionado
                 const urlParams = new URLSearchParams(window.location.search);
                 urlParams.set('locale', languageOption);
-                window.location.search = urlParams.toString();
+                window.location.href = urlParams.toString();
               }
             }
 
