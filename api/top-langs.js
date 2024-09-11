@@ -1,4 +1,4 @@
-import { renderTopLanguages } from "../src/cards/top-languages-card.js";
+import { renderStatsCard } from "../src/cards/stats-card.js";
 import { blacklist } from "../src/common/blacklist.js";
 import {
   clampValue,
@@ -7,7 +7,7 @@ import {
   parseBoolean,
   renderError,
 } from "../src/common/utils.js";
-import { fetchTopLanguages } from "../src/fetchers/top-languages-fetcher.js";
+import { fetchStats } from "../src/fetchers/stats-fetcher.js";
 import { isLocaleAvailable } from "../src/translations.js";
 
 export default async (req, res) => {
@@ -17,22 +17,27 @@ export default async (req, res) => {
     hide_title,
     hide_border,
     card_width,
+    hide_rank,
+    show_icons,
+    include_all_commits,
+    line_height,
     title_color,
+    ring_color,
+    icon_color,
     text_color,
+    text_bold,
     bg_color,
     theme,
     cache_seconds,
-    layout,
-    langs_count,
     exclude_repo,
-    size_weight,
-    count_weight,
     custom_title,
     locale,
-    border_radius,
-    border_color,
     disable_animations,
-    hide_progress,
+    border_radius,
+    number_format,
+    border_color,
+    rank_icon,
+    show,
   } = req.query;
 
   // Define o cabeçalho como HTML
@@ -54,23 +59,19 @@ export default async (req, res) => {
   }
 
   if (locale && !isLocaleAvailable(locale)) {
-    return res.send(`<html><body>${renderError("Something went wrong", "Locale not found")}</body></html>`);
-  }
-
-  if (
-    layout !== undefined &&
-    (typeof layout !== "string" ||
-      !["compact", "normal", "donut", "donut-vertical", "pie"].includes(layout))
-  ) {
-    return res.send(`<html><body>${renderError("Something went wrong", "Incorrect layout input")}</body></html>`);
+    return res.send(`<html><body>${renderError("Something went wrong", "Language not found")}</body></html>`);
   }
 
   try {
-    const topLangs = await fetchTopLanguages(
+    const showStats = parseArray(show);
+    const stats = await fetchStats(
       username,
+      parseBoolean(include_all_commits),
       parseArray(exclude_repo),
-      size_weight,
-      count_weight,
+      showStats.includes("prs_merged") ||
+        showStats.includes("prs_merged_percentage"),
+      showStats.includes("discussions_started"),
+      showStats.includes("discussions_answered"),
     );
 
     let cacheSeconds = clampValue(
@@ -89,28 +90,35 @@ export default async (req, res) => {
       }, s-maxage=${cacheSeconds}, stale-while-revalidate=${CONSTANTS.ONE_DAY}`,
     );
 
-    // Retorna o SVG dentro de uma estrutura HTML
+    // Retorna o SVG dentro de uma estrutura HTML com um dropdown para selecionar idioma
     return res.send(`
       <html>
         <body>
           <div>
-            ${renderTopLanguages(topLangs, {
-              custom_title,
+            ${renderStatsCard(stats, {
+              hide: parseArray(hide),
+              show_icons: parseBoolean(show_icons),
               hide_title: parseBoolean(hide_title),
               hide_border: parseBoolean(hide_border),
               card_width: parseInt(card_width, 10),
-              hide: parseArray(hide),
+              hide_rank: parseBoolean(hide_rank),
+              include_all_commits: parseBoolean(include_all_commits),
+              line_height,
               title_color,
+              ring_color,
+              icon_color,
               text_color,
+              text_bold: parseBoolean(text_bold),
               bg_color,
               theme,
-              layout,
-              langs_count,
+              custom_title,
               border_radius,
               border_color,
+              number_format,
               locale: locale ? locale.toLowerCase() : null,
               disable_animations: parseBoolean(disable_animations),
-              hide_progress: parseBoolean(hide_progress),
+              rank_icon,
+              show: showStats,
             })}
 
             <!-- Adiciona o drop-down para selecionar o idioma -->
@@ -133,47 +141,19 @@ export default async (req, res) => {
           <!-- Script para manipular o SVG -->
           <script>
             // Função para atualizar o título do langcard com base na seleção de idioma
-            function atualizarTituloIdioma() {
+            function atualizarIdioma() {
               // Seleciona o SVG
               const svg = document.querySelector('svg'); // Assume que o SVG é o único na página
-                
-              // Seleciona o elemento <text> que representa o título (assumindo que é o primeiro elemento <text>)
-              const titulo = svg.querySelector('text'); // Você pode ajustar o seletor se necessário
-                
-              // Verifica a seleção do drop-down (inglês ou português)
               const languageOption = document.getElementById('languageSelector').value;
 
-              // Atualiza o título de acordo com a seleção de idioma
-              if (languageOption === 'en') {
-                titulo.textContent = "Most Used Languages";
-              } if (languageOption === 'pt') {
-                titulo.textContent = "Linguagens Mais Usadas";
-              } if (languageOption === 'fr') {
-                titulo.textContent = "Langages les plus utilisés";
-              } if (languageOption === 'es') {
-                titulo.textContent = "Lenguajes más usados";
-              } if (languageOption === 'de') {
-                titulo.textContent = "Meist verwendete Sprache";
-              } if (languageOption === 'pl') {
-                titulo.textContent = "Najczęściej używane języki";
-              } if (languageOption === 'ru') {
-                titulo.textContent = "Наиболее часто используемые языки";
-              } if (languageOption === 'ar') {
-                titulo.textContent = "أكثر اللغات إستخداماً";
-              } if (languageOption === 'ja') {
-                titulo.textContent = "最もよく使っている言語";
-              } if (languageOption === 'cn') {
-                titulo.textContent = "最常用的语言";
-              } if (languageOption === 'np') {
-                titulo.textContent = "अधिक प्रयोग गरिएको भाषाहरू";
-              }
+              // Recarrega a página com o novo idioma selecionado
+              const urlParams = new URLSearchParams(window.location.search);
+              urlParams.set('locale', languageOption);
+              window.location.search = urlParams.toString();
             }
 
             // Adiciona o evento de mudança ao drop-down
-            document.getElementById('languageSelector').addEventListener('change', atualizarTituloIdioma);
-            
-            // Chama a função para atualizar o título ao carregar a página
-            atualizarTituloIdioma();
+            document.getElementById('languageSelector').addEventListener('change', atualizarIdioma);
           </script>
         </body>
       </html>
@@ -184,7 +164,7 @@ export default async (req, res) => {
       `max-age=${CONSTANTS.ERROR_CACHE_SECONDS / 2}, s-maxage=${
         CONSTANTS.ERROR_CACHE_SECONDS
       }, stale-while-revalidate=${CONSTANTS.ONE_DAY}`,
-    );
+    ); // Use lower cache period for errors.
 
     // Retorna o erro também dentro de uma estrutura HTML
     return res.send(`
