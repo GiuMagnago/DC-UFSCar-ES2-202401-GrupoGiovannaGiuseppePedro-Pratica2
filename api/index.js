@@ -121,9 +121,8 @@ export default async (req, res) => {
               show: showStats,
             })}
             
-            </div>
-            <div>
-
+          </div>
+          <div>
             <!-- Adiciona o drop-down para selecionar o idioma -->
             <label for="languageSelector" onload="checkLang()">Escolha o idioma:</label>
             <select id="languageSelector">
