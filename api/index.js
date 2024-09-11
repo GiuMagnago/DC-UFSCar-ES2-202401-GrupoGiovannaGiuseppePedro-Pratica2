@@ -120,6 +120,9 @@ export default async (req, res) => {
               rank_icon,
               show: showStats,
             })}
+            
+            </div>
+            <div>
 
             <!-- Adiciona o drop-down para selecionar o idioma -->
             <label for="languageSelector" onload="checkLang()">Escolha o idioma:</label>
