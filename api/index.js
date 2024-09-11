@@ -120,14 +120,10 @@ export default async (req, res) => {
               rank_icon,
               show: showStats,
             })}
-            
-          </div>
-          <div>
 
             <!-- Adiciona o drop-down para selecionar o idioma -->
-            <label for="languageSelector" onload="checkLang()">Escolha o idioma:</label>
+            <label for="languageSelector">Escolha o idioma:</label>
             <select id="languageSelector">
-              <option value="" selected>Linguagem</option>
               <option value="en">Inglês</option> <!-- Inglês -->
               <option value="pt-br">Português</option> <!-- Português -->
               <option value="fr">Francês</option> <!-- Francês -->
@@ -143,19 +139,17 @@ export default async (req, res) => {
           </div>
 
           <!-- Script para manipular o SVG -->
-          <script>            
+          <script>
             // Função para atualizar o título do langcard com base na seleção de idioma
             function atualizarIdioma() {
               // Seleciona o SVG
               const svg = document.querySelector('svg'); // Assume que o SVG é o único na página
               const languageOption = document.getElementById('languageSelector').value;
 
-              if (languageOption !== "") {
-                // Recarrega a página com o novo idioma selecionado
-                const urlParams = new URLSearchParams(window.location.search);
-                urlParams.set('locale', languageOption);
-                window.location.search = urlParams.toString();
-              }
+              // Recarrega a página com o novo idioma selecionado
+              const urlParams = new URLSearchParams(window.location.search);
+              urlParams.set('locale', languageOption);
+              window.location.search = urlParams.toString();
             }
 
             // Adiciona o evento de mudança ao drop-down
