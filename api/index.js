@@ -123,10 +123,11 @@ export default async (req, res) => {
             
           </div>
           <div>
+
             <!-- Adiciona o drop-down para selecionar o idioma -->
             <label for="languageSelector" onload="checkLang()">Escolha o idioma:</label>
             <select id="languageSelector">
-              <option value="">Linguagem</option>
+              <option value="" selected>Linguagem</option>
               <option value="en">Inglês</option> <!-- Inglês -->
               <option value="pt-br">Português</option> <!-- Português -->
               <option value="fr">Francês</option> <!-- Francês -->
@@ -153,7 +154,7 @@ export default async (req, res) => {
                 // Recarrega a página com o novo idioma selecionado
                 const urlParams = new URLSearchParams(window.location.search);
                 urlParams.set('locale', languageOption);
-                window.location.href = urlParams.toString();
+                window.location.search = urlParams.toString();
               }
             }
 
