@@ -125,7 +125,7 @@ export default async (req, res) => {
             <label for="languageSelector">Escolha o idioma:</label>
             <select id="languageSelector">
               <option value="en" ${locale === 'en' ? 'selected' : ''}>Inglês</option> <!-- Inglês -->
-              <option value="pt-br" ${locale === 'pt-br' ? 'selected' : ''}>Português</option> <!-- Português -->
+              <option value="pt-br" selected ${locale === 'pt-br' ? 'selected' : ''}>Português</option> <!-- Português -->
               <option value="fr" ${locale === 'fr' ? 'selected' : ''}>Francês</option> <!-- Francês -->
               <option value="es" ${locale === 'es' ? 'selected' : ''}>Espanhol</option> <!-- Espanhol -->
               <option value="de" ${locale === 'de' ? 'selected' : ''}>Alemão</option> <!-- Alemão -->
