@@ -124,17 +124,17 @@ export default async (req, res) => {
             <!-- Adiciona o drop-down para selecionar o idioma -->
             <label for="languageSelector">Escolha o idioma:</label>
             <select id="languageSelector">
-              <option value="en">Inglês</option> <!-- Inglês -->
-              <option value="pt-br">Português</option> <!-- Português -->
-              <option value="fr">Francês</option> <!-- Francês -->
-              <option value="es">Espanhol</option> <!-- Espanhol -->
-              <option value="de">Alemão</option> <!-- Alemão -->
-              <option value="pl">Polonês</option> <!-- Polonês -->
-              <option value="ru">Russo</option> <!-- Russo -->
-              <option value="ar">Árabe</option> <!-- Árabe -->
-              <option value="ja">Japonês</option> <!-- Japonês -->
-              <option value="cn">Chinês</option> <!-- Chinês -->
-              <option value="np">Nepalês</option> <!-- Nepalês -->
+              <option value="en" ${locale === "en" ? "selected" : ""}>Inglês</option> <!-- Inglês -->
+              <option value="pt-br" ${locale === "pt-br" ? "selected" : ""}>Português</option> <!-- Português -->
+              <option value="fr" ${locale === "fr" ? "selected" : ""}>Francês</option> <!-- Francês -->
+              <option value="es" ${locale === "es" ? "selected" : ""}>Espanhol</option> <!-- Espanhol -->
+              <option value="de" ${locale === "de" ? "selected" : ""}>Alemão</option> <!-- Alemão -->
+              <option value="pl" ${locale === "pl" ? "selected" : ""}>Polonês</option> <!-- Polonês -->
+              <option value="ru" ${locale === "ru" ? "selected" : ""}>Russo</option> <!-- Russo -->
+              <option value="ar" ${locale === "ar" ? "selected" : ""}>Árabe</option> <!-- Árabe -->
+              <option value="ja" ${locale === "ja" ? "selected" : ""}>Japonês</option> <!-- Japonês -->
+              <option value="cn" ${locale === "cn" ? "selected" : ""}>Chinês</option> <!-- Chinês -->
+              <option value="np" ${locale === "np" ? "selected" : ""}>Nepalês</option> <!-- Nepalês -->
             </select>
           </div>
 
