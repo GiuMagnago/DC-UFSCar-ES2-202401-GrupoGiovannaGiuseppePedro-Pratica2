@@ -124,6 +124,7 @@ export default async (req, res) => {
             <!-- Adiciona o drop-down para selecionar o idioma -->
             <label for="languageSelector">Escolha o idioma:</label>
             <select id="languageSelector">
+              <option value="" delected>Select</option>
               <option value="en">Inglês</option> <!-- Inglês -->
               <option value="pt-br">Português</option> <!-- Português -->
               <option value="fr">Francês</option> <!-- Francês -->
@@ -146,10 +147,12 @@ export default async (req, res) => {
               const svg = document.querySelector('svg'); // Assume que o SVG é o único na página
               const languageOption = document.getElementById('languageSelector').value;
 
-              // Recarrega a página com o novo idioma selecionado
-              const urlParams = new URLSearchParams(window.location.search);
-              urlParams.set('locale', languageOption);
-              window.location.search = urlParams.toString();
+              if (languageOption !== "") {
+                // Recarrega a página com o novo idioma selecionado
+                const urlParams = new URLSearchParams(window.location.search);
+                urlParams.set('locale', languageOption);
+                window.location.search = urlParams.toString();
+              }
             }
 
             // Adiciona o evento de mudança ao drop-down
